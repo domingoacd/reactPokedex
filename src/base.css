@@ -1,0 +1,19 @@
+body {
+--gainsboro: hsla(240, 1%, 86%, 1);
+--silver: hsla(280, 3%, 77%, 1);
+--davys-grey: hsla(210, 4%, 29%, 1);
+--black-coral: hsla(206, 16%, 35%, 1);
+--blue-munsell: hsla(192, 73%, 36%, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* $gainsboro: #dcdcddff;
+$silver: #c5c3c6ff;
+$davys-grey: #46494cff;
+$black-coral: #4c5c68ff;
+$blue-munsell: #1985a1ff; */
