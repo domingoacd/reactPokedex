@@ -5,6 +5,7 @@ const theme = {
   mainFontColor: '#383838',
   mainTitleColor: '#8F8F8F',
   lightGray: '#676767',
+  barGray: '#C4C4C4',
   whiteTone: '#FFF',
   lightBlue: '#8DDDE2',
   blue: '#00C1CD',
