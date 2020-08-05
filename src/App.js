@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import styled from 'styled-components';
+import api from './api-fetcher';
 import PokemonInfo from './components/PokemonInfo';
 import Home from './components/Home';
 
@@ -16,6 +17,15 @@ function App() {
     overflow: hidden;
     background-color: ${props => props.theme.whiteTone};
   `;
+
+  const [pokemons, updatePokemons] = useState([]);
+  let fetchedPokemons = [];
+
+  useEffect(() => {
+    api.getAllPokemons().then((pokemons) => {
+      updatePokemons(pokemons);
+    });
+  }, []);
 
   return (
     <BrowserRouter>
