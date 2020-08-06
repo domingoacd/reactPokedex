@@ -10,7 +10,7 @@ const theme = {
   lightBlue: '#8DDDE2',
   blue: '#00C1CD',
   grass: '#78C850',
-  insect: '#A8B820',
+  bug: '#A8B820',
   normal: '#A8A878',
   fire: '#F08030',
   fighting: '#C03028',

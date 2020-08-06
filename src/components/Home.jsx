@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Pokemon from './Pokemon';
 import styled from 'styled-components';
-const Home = () => {
 
-  const HomeWrapper = styled.div`
+const HomeWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -11,14 +10,14 @@ const Home = () => {
     margin: 0 auto;
   `;
 
-  const MainTitle = styled.h1`
+const MainTitle = styled.h1`
     text-align: center;
     font-size: 3.5rem;
     font-weight: 400;
     color: ${(props) => props.theme.mainTitleColor};
   `;
 
-  const SearchBar = styled.input`
+const SearchBar = styled.input`
     width: 90%;
     max-width: 30rem;
     height: 2.8rem;
@@ -34,7 +33,7 @@ const Home = () => {
     }
   `;
 
-  const TypesContainer = styled.div`
+const TypesContainer = styled.div`
     width: 100%;
     max-width: 40rem;
     height: 2.5rem;
@@ -49,7 +48,33 @@ const Home = () => {
     background-color: ${(props) => props.theme.blue};
   `;
 
+const Home = ({ pokemonsToFetch }) => {
 
+  const [pokemonsData, setPokemonsData] = useState([]);
+
+  useEffect(() => {
+    const allPokemonData = [];
+    let cont = 0;
+    if (pokemonsToFetch) {
+      pokemonsToFetch.forEach(async pokemon => {
+        await fetch(pokemon.url)
+          .then(res => res.json())
+          .then(data => {
+            cont++;
+            allPokemonData.push(data)
+            if(cont === 20) {
+              setPokemonsData(allPokemonData);
+            }
+          });
+      });
+    }
+  }, [pokemonsToFetch]);
+
+  function handlePokemons() {
+    console.log(pokemonsData)
+    return pokemonsData.map( pokemon => <Pokemon key={pokemon.name} data={pokemon}/>)
+    
+  }
   return(
     <HomeWrapper>
       <MainTitle>
@@ -59,7 +84,8 @@ const Home = () => {
       <TypesContainer>
         Types
       </TypesContainer>
-      <Pokemon />
+      {handlePokemons()}
+
     </HomeWrapper>
   );
 }

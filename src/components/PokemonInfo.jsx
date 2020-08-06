@@ -2,16 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import grass from '../assets/img/hoja.svg';
 
-const PokemonInfo = () => {
-
-  const PokemonInfoContainer = styled.div`
+const PokemonInfoContainer = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
   `;
 
-  const Circle = styled.div`
+const Circle = styled.div`
     position: absolute;
     top: -11rem;
     width: 160%;
@@ -25,7 +23,7 @@ const PokemonInfo = () => {
     }
   `;
 
-  const PokemonIcon = styled.img`
+const PokemonIcon = styled.img`
     position: absolute;
     bottom: 1rem;
     left: 2rem;
@@ -35,7 +33,7 @@ const PokemonInfo = () => {
     filter: invert(1);
   `;
 
-  const PokemonMainInfo = styled.div`
+const PokemonMainInfo = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
@@ -43,31 +41,31 @@ const PokemonInfo = () => {
     text-align: center;
     margin-bottom: 1rem;
   `;
-  
-  const PokemonName = styled.h1`
+
+const PokemonName = styled.h1`
     font-size: 2.5rem;
     font-weight: 400;
     color: ${(props) => props.theme.whiteTone};
   `;
 
-  const PokemonNumber = styled.p`
+const PokemonNumber = styled.p`
     font-size: 1.4rem;
     color: ${(props) => props.theme.whiteTone};
   `;
 
-  const PokemonImage = styled.img`
+const PokemonImage = styled.img`
     position: relative;
     width: 90%;
     max-width: 18rem;
     margin-bottom: 1rem;
   `;
 
-  const PokemonTypesContainer = styled.div`
+const PokemonTypesContainer = styled.div`
     display: flex;
     margin-bottom: 1rem;
   `;
 
-  const PokemonType = styled.a`
+const PokemonType = styled.a`
     width: 7rem;
     height: 2.5rem;
     display: grid;
@@ -78,14 +76,14 @@ const PokemonInfo = () => {
     background-color: ${(props) => props.theme.grass};
   `;
 
-  const PokemonDescription = styled.p`
+const PokemonDescription = styled.p`
     width: 90%;
     max-width: 18rem;
     margin-bottom: 2rem;
     color: ${props => props.theme.mainFontColor};
   `;
 
-  const PokemonSection = styled.section`
+const PokemonSection = styled.section`
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -93,7 +91,7 @@ const PokemonInfo = () => {
     margin-bottom: 2rem;
   `;
 
-  const PokTitle = styled.h2`
+const PokTitle = styled.h2`
     font-weight: 400;
     text-align: center;
     margin-bottom: 1rem;
@@ -101,13 +99,13 @@ const PokemonInfo = () => {
     color: ${props => props.theme.grass};
   `;
 
-  const Container = styled.div`
+const Container = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-around;
   `;
 
-  const ColWrapper = styled.div`
+const ColWrapper = styled.div`
     width: 30%;
     max-width: 8rem;
     display: flex;
@@ -115,61 +113,61 @@ const PokemonInfo = () => {
     align-items: center;
   `;
 
-  const EvolutionImage= styled.img`
+const EvolutionImage = styled.img`
     width: 100%;
     height: auto;
   `;
 
-  const EvolutionName = styled.p`
+const EvolutionName = styled.p`
     font-size: 0.7rem;
     text-align: center;
     color: ${props => props.theme.mainFontColor};
   `;
 
-  const EvolutionCondition = styled.p`
+const EvolutionCondition = styled.p`
     font-size: 0.7rem;
     text-align: center;
     color: ${props => props.theme.mainFontColor};
   `;
 
-  const SizeTitle = styled.h3`
+const SizeTitle = styled.h3`
     font-size: 0.9rem;
     font-weight: 400;
     margin-bottom: 0.4rem;
     color: ${props => props.theme.mainFontColor};
   `;
-  const Size = styled.p`
+const Size = styled.p`
     font-size: 1.5rem;
     color: ${props => props.theme.mainFontColor};
   `;
-  
-  const StatsContainer = styled.div`
+
+const StatsContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
   `;
 
-  const Stat = styled.div`
+const Stat = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
   `;
 
-  const StatName = styled.p`
+const StatName = styled.p`
     font-size: 0.8rem;
     width: 20%;
     font-weight: 400;
     color: ${props => props.theme.lightGray};
   `;
 
-  const StatNumber = styled.p`
+const StatNumber = styled.p`
     width: 15%;
     font-weight: bold;
     color: ${props => props.theme.mainFontColor};
   `;
 
-  const StatBar = styled.div`
+const StatBar = styled.div`
     position: relative;
     width: 65%;
     height:0.8rem;
@@ -178,7 +176,7 @@ const PokemonInfo = () => {
     background-color: ${props => props.theme.barGray};
   `;
 
-  const BarProgress = styled.div`
+const BarProgress = styled.div`
     position: absolute;
     top: 0;
     left: 0;
@@ -186,31 +184,33 @@ const PokemonInfo = () => {
     height: 100%;
     background-color: ${props => props.theme.grass};
   `;
-  const NextPok = styled.div`
+const NextPok = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
   `;
-  const PrevPok = styled.div`
+const PrevPok = styled.div`
     display: flex;
     visibility: hidden;
     flex-direction: column;
     align-items: flex-start;
   `;
 
-  const NextPokImage = styled.img`
+const NextPokImage = styled.img`
     width: 3rem;
   `;
 
-  const NextPokeTitle = styled.p`
+const NextPokeTitle = styled.p`
     color: ${props => props.theme.lightGray};
   `;
 
-  const BottomSection = styled.div`
+const BottomSection = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
   `;
+  
+const PokemonInfo = () => {
 
  
   return(
