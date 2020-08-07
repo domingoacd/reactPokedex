@@ -71,7 +71,6 @@ const PokemonTypeIcon = styled.img`
   `;
 
 const Pokemon = (props) => {
-  console.log(props.data)
 
   return( 
     <PokemonContainer type={props.data.types[0].type.name}>

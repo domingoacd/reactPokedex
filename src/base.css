@@ -10,6 +10,14 @@
   font-family: Roboto;
 }
 
+a {
+  text-decoration: none;
+}
+.pokemonLink {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 /* $gainsboro: #dcdcddff;
 $silver: #c5c3c6ff;
 $davys-grey: #46494cff;

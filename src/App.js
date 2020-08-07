@@ -23,7 +23,6 @@ function App() {
 
   useEffect(() => {
     api.getAllPokemons().then((pokemons) => {
-      console.log('result', pokemons)
       updatePokemons(pokemons.results);
     });
   }, []);
@@ -37,7 +36,7 @@ function App() {
             path="/" 
             render={(props) => <Home {...props} pokemonsToFetch={pokemons}/>}
           />
-          <Route exact path="/pokemon" component={PokemonInfo}/>
+          <Route path="/pokemon" component={PokemonInfo}/>
         </Switch>
       </AppWrapper>    
     </BrowserRouter>

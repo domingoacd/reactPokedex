@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import Pokemon from './Pokemon';
 import styled from 'styled-components';
 
@@ -67,7 +68,7 @@ const Home = ({ pokemonsToFetch }) => {
               sortedPokemons = allPokemonData.sort((a,b) => {
                 if (a.id > b.id) {
                   return 1;
-                } else if (a.id == b.id){
+                } else if (a.id === b.id){
                   return 0;
                 } else {
                   return -1;
@@ -81,8 +82,7 @@ const Home = ({ pokemonsToFetch }) => {
   }, [pokemonsToFetch]);
 
   function handlePokemons() {
-    console.log(pokemonsData)
-    return pokemonsData.map( pokemon => <Pokemon key={pokemon.name} data={pokemon}/>)
+    return pokemonsData.map(pokemon => <Link className={"pokemonLink"} to={`/pokemon/${pokemon.name}`}><Pokemon key={pokemon.name} data={pokemon} /></Link>)
     
   }
   return(

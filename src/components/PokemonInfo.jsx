@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import grass from '../assets/img/hoja.svg';
 
@@ -16,7 +17,7 @@ const Circle = styled.div`
     height: 25rem;
     border-radius: 50%;
     overflow: hidden;
-    background-color: ${(props) => props.theme.grass};
+    background-color: ${(props) => props.theme[`${props.type}`]};
 
     @media screen and (min-width: 450px){
       width: 120%;
@@ -45,6 +46,7 @@ const PokemonMainInfo = styled.div`
 const PokemonName = styled.h1`
     font-size: 2.5rem;
     font-weight: 400;
+    text-transform: capitalize;
     color: ${(props) => props.theme.whiteTone};
   `;
 
@@ -72,8 +74,9 @@ const PokemonType = styled.a`
     place-items: center;
     border-radius: 20px;
     font-size: 1.3rem;
+    text-transform: capitalize;
     color: ${(props) => props.theme.whiteTone};
-    background-color: ${(props) => props.theme.grass};
+    background-color: ${(props) => props.theme[`${props.type}`]};
   `;
 
 const PokemonDescription = styled.p`
@@ -210,24 +213,43 @@ const BottomSection = styled.div`
     justify-content: space-between;
   `;
   
-const PokemonInfo = () => {
+const PokemonInfo = (props) => {
+  const location = useLocation();
+  const pokemonToShow = location.pathname.split('/')[2];
+  const [ pokemonData, setPokemonData ] = useState("");
+  
+  console.log(pokemonData);
+  useEffect(() => {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToShow}`)
+      .then(res => res.json())
+      .then(data => setPokemonData(data));
+  }, []);
+  
+  function getPokemonTypes() {
+    let types = [];
+    pokemonData.types.forEach(type => {
+      types.push(<PokemonType type={type.type.name}>{type.type.name}</PokemonType>);
+    })
 
- 
+    return types;
+  }
   return(
+    pokemonData ?
     <PokemonInfoContainer>
-      <Circle>
-        <PokemonIcon src={grass} />
+      
+      <Circle type={pokemonData.types[0].type.name}>
+          <PokemonIcon src={`/images/${pokemonData.types[0].type.name}.svg`} />
       </Circle>
 
       <PokemonMainInfo>
-        <PokemonName> Bulbasaur </PokemonName>
-        <PokemonNumber>#001</PokemonNumber>
+        <PokemonName> {pokemonData.name} </PokemonName>
+        <PokemonNumber>{`#${pokemonData.id}`}</PokemonNumber>
       </PokemonMainInfo>
 
-      <PokemonImage src={'https://pokeres.bastionbot.org/images/pokemon/1.png'}/>
+      <PokemonImage src={`https://pokeres.bastionbot.org/images/pokemon/${pokemonData.id}.png`}/>
 
       <PokemonTypesContainer>
-        <PokemonType>Grass</PokemonType>
+        {getPokemonTypes()}
       </PokemonTypesContainer>
 
       <PokemonDescription>
@@ -301,6 +323,7 @@ const PokemonInfo = () => {
         </NextPok>
       </BottomSection>
     </PokemonInfoContainer>
+    : ""
   )
 }
 
