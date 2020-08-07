@@ -76,7 +76,7 @@ const Pokemon = (props) => {
   return( 
     <PokemonContainer type={props.data.types[0].type.name}>
       <ContainerLeftSide>
-        <PokemonTypeIcon src={grass}/>
+        <PokemonTypeIcon src={`/images/${props.data.types[0].type.name}.svg`}/>
         <PokemonName>{props.data.name}</PokemonName>
         <PokemonNumber>#{props.data.id}</PokemonNumber>
       </ContainerLeftSide>
