@@ -78,9 +78,9 @@ const Pokemon = (props) => {
       <ContainerLeftSide>
         <PokemonTypeIcon src={grass}/>
         <PokemonName>{props.data.name}</PokemonName>
-        <PokemonNumber>#{props.data.order}</PokemonNumber>
+        <PokemonNumber>#{props.data.id}</PokemonNumber>
       </ContainerLeftSide>
-      <PokemonImage src={`https://pokeres.bastionbot.org/images/pokemon/${props.data.order}.png`}/>
+      <PokemonImage src={`https://pokeres.bastionbot.org/images/pokemon/${props.data.id}.png`}/>
     </PokemonContainer>
   );
 }

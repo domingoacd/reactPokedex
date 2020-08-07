@@ -54,6 +54,7 @@ const Home = ({ pokemonsToFetch }) => {
 
   useEffect(() => {
     const allPokemonData = [];
+    let sortedPokemons = [];
     let cont = 0;
     if (pokemonsToFetch) {
       pokemonsToFetch.forEach(async pokemon => {
@@ -63,7 +64,16 @@ const Home = ({ pokemonsToFetch }) => {
             cont++;
             allPokemonData.push(data)
             if(cont === 20) {
-              setPokemonsData(allPokemonData);
+              sortedPokemons = allPokemonData.sort((a,b) => {
+                if (a.id > b.id) {
+                  return 1;
+                } else if (a.id == b.id){
+                  return 0;
+                } else {
+                  return -1;
+                }
+              });
+              setPokemonsData(sortedPokemons);
             }
           });
       });
