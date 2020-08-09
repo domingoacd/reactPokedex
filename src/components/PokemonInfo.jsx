@@ -99,7 +99,7 @@ const PokTitle = styled.h2`
     text-align: center;
     margin-bottom: 1rem;
     filter: brightness(85%);
-    color: ${props => props.theme.grass};
+    color: ${props => props.theme[`${props.type}`]};
   `;
 
 const Container = styled.div`
@@ -217,14 +217,31 @@ const PokemonInfo = (props) => {
   const location = useLocation();
   const pokemonToShow = location.pathname.split('/')[2];
   const [ pokemonData, setPokemonData ] = useState("");
+  const [ pokemonEvolutions, setpokemonEvolutions ] = useState("");
   
-  console.log(pokemonData);
+  
   useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToShow}`)
-      .then(res => res.json())
-      .then(data => setPokemonData(data));
+    // fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToShow}`)
+    //   .then(res => res.json())
+    //   .then(data => data)
+    //   .then();
+    Promise.all([
+      fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToShow}`),
+      fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonToShow}/`)
+    ])
+      .then(responses => Promise.all(responses.map(res => res.json())))
+      .then(data => {
+        const evolution_url = data[1].evolution_chain.url;
+
+        fetch(evolution_url)
+          .then(res => res.json())
+          .then(evolutions => {
+            setPokemonData(data[0]);
+            setpokemonEvolutions(evolutions);
+          });
+      });
   }, []);
-  
+  console.log('evol', pokemonEvolutions)
   function getPokemonTypes() {
     let types = [];
     pokemonData.types.forEach(type => {
@@ -233,8 +250,37 @@ const PokemonInfo = (props) => {
 
     return types;
   }
+
+  function getEvolutionIdFromUrl(url) {
+    const urlChunks = url.split('/');
+    return urlChunks[urlChunks.length - 2];
+  }
+
+  function getEvolutions() {
+    let evolutionToGet = [pokemonEvolutions.chain];
+    let allEvolutions = [];
+
+    
+    
+    do {
+      let currentEvolution = evolutionToGet[0].species;
+      let evolutionId = getEvolutionIdFromUrl(currentEvolution.url);
+      allEvolutions.push(
+        <ColWrapper>
+          <EvolutionImage src={`https://pokeres.bastionbot.org/images/pokemon/${evolutionId}.png`} />
+          <EvolutionName>{currentEvolution.name}</EvolutionName>
+          <EvolutionCondition></EvolutionCondition>
+        </ColWrapper>
+      );
+
+      evolutionToGet = evolutionToGet[0].evolves_to;
+    } while (evolutionToGet.length > 0);
+
+    return allEvolutions;
+  }
+
   return(
-    pokemonData ?
+    pokemonData && pokemonEvolutions?
     <PokemonInfoContainer>
       
       <Circle type={pokemonData.types[0].type.name}>
@@ -257,30 +303,16 @@ const PokemonInfo = (props) => {
       </PokemonDescription>
 
       <PokemonSection>
-        <PokTitle>
+        <PokTitle type={pokemonData.types[0].type.name}>
           Evolution
         </PokTitle>
         <Container>
-          <ColWrapper>
-            <EvolutionImage src={'https://pokeres.bastionbot.org/images/pokemon/1.png'}/>
-            <EvolutionName>Bulbasaur</EvolutionName>
-            <EvolutionCondition></EvolutionCondition>
-          </ColWrapper>
-          <ColWrapper>
-            <EvolutionImage src={'https://pokeres.bastionbot.org/images/pokemon/2.png'}/>
-            <EvolutionName>Ivysaur</EvolutionName>
-            <EvolutionCondition>Lv. 16</EvolutionCondition>
-          </ColWrapper>
-          <ColWrapper>
-            <EvolutionImage src={'https://pokeres.bastionbot.org/images/pokemon/3.png'}/>
-            <EvolutionName>Venasaur</EvolutionName>
-            <EvolutionCondition>Lv. 32</EvolutionCondition>
-          </ColWrapper>
+          {getEvolutions()}
         </Container>
       </PokemonSection>
       
       <PokemonSection>
-        <PokTitle>Biology</PokTitle>
+        <PokTitle type={pokemonData.types[0].type.name}>Biology</PokTitle>
         <Container>
           <ColWrapper>
             <SizeTitle>Weight</SizeTitle>
@@ -294,7 +326,7 @@ const PokemonInfo = (props) => {
       </PokemonSection>
 
       <PokemonSection>
-        <PokTitle>Base Stats</PokTitle>
+        <PokTitle type={pokemonData.types[0].type.name}>Base Stats</PokTitle>
         <StatsContainer>
           <Stat>
             <StatName>HP</StatName>
