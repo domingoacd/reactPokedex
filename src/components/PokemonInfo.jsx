@@ -161,6 +161,7 @@ const StatName = styled.p`
     font-size: 0.8rem;
     width: 20%;
     font-weight: 400;
+    text-transform: uppercase;
     color: ${props => props.theme.lightGray};
   `;
 
@@ -183,9 +184,9 @@ const BarProgress = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    width: 50%;
+    width: ${props => (props.progress * 100 / 255) + '%'};
     height: 100%;
-    background-color: ${props => props.theme.grass};
+    background-color: ${props => props.theme[`${props.type}`]};
   `;
 const NextPok = styled.div`
     display: flex;
@@ -241,7 +242,7 @@ const PokemonInfo = (props) => {
           });
       });
   }, []);
-  console.log('evol', pokemonEvolutions)
+  
   function getPokemonTypes() {
     let types = [];
     pokemonData.types.forEach(type => {
@@ -277,6 +278,20 @@ const PokemonInfo = (props) => {
     } while (evolutionToGet.length > 0);
 
     return allEvolutions;
+  }
+
+  function getPokemonStats() {
+    const stats = pokemonData.stats;
+
+    return stats.map(stat => 
+      <Stat>
+        <StatName>{stat.stat.name}</StatName>
+        <StatNumber>{stat.base_stat}</StatNumber>
+        <StatBar>
+          <BarProgress progress={stat.base_stat} type={pokemonData.types[0].type.name}></BarProgress>
+        </StatBar>
+      </Stat>
+    );
   }
 
   return(
@@ -316,11 +331,11 @@ const PokemonInfo = (props) => {
         <Container>
           <ColWrapper>
             <SizeTitle>Weight</SizeTitle>
-            <Size>32.5 Kg</Size>
+            <Size>{(pokemonData.weight * 0.1).toFixed(1)} Kg</Size>
           </ColWrapper>
           <ColWrapper>
             <SizeTitle>Height</SizeTitle>
-            <Size>0.7 m</Size>
+            <Size>{(pokemonData.height * 0.1).toFixed(1)} m</Size>
           </ColWrapper>
         </Container>
       </PokemonSection>
@@ -328,20 +343,7 @@ const PokemonInfo = (props) => {
       <PokemonSection>
         <PokTitle type={pokemonData.types[0].type.name}>Base Stats</PokTitle>
         <StatsContainer>
-          <Stat>
-            <StatName>HP</StatName>
-            <StatNumber>80</StatNumber>
-            <StatBar>
-              <BarProgress></BarProgress>
-            </StatBar>
-          </Stat>
-          <Stat>
-            <StatName>Defense</StatName>
-            <StatNumber>80</StatNumber>
-            <StatBar>
-              <BarProgress></BarProgress>
-            </StatBar>
-          </Stat>
+          {getPokemonStats()}
         </StatsContainer>
       </PokemonSection>
       <BottomSection>
