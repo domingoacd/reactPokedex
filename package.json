@@ -1,6 +1,6 @@
 {
-  "name": "react-pokedex",
   "homepage": "https://domingoacd.github.io/react-pokedex/",
+  "name": "react-pokedex",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
