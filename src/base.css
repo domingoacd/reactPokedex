@@ -23,3 +23,8 @@ $silver: #c5c3c6ff;
 $davys-grey: #46494cff;
 $black-coral: #4c5c68ff;
 $blue-munsell: #1985a1ff; */
+
+@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}

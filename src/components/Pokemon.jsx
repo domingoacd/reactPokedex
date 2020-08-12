@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import grass from '../assets/img/hoja.svg';
 
 const PokemonContainer = styled.div`
     position: relative;
-    width: 100%;
+    width: 80vw;
     max-width: 25rem;
     height: 6rem;
     display: flex;

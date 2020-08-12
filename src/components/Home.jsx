@@ -49,42 +49,115 @@ const TypesContainer = styled.div`
     background-color: ${(props) => props.theme.blue};
   `;
 
-const Home = ({ pokemonsToFetch }) => {
+const BottomLoader = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 20rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 0.7rem;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  color: ${props => props.theme.whiteTone};
+  background-color: ${props => props.theme.barGray};
+`;
+
+const BottomSpinner = styled.div`
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid ${props => props.theme.barGray};
+  border-top: 2px solid ${props => props.theme.whiteTone};
+  border-left: 2px solid ${props => props.theme.whiteTone};
+  animation: spin 1s linear infinite;
+`;
+
+const Home = ({ pokemonsToFetch, next }) => {
 
   const [pokemonsData, setPokemonsData] = useState([]);
+  const [showBottomLoad, setBottomLoad] = useState(false);
+  const [pokemonsLink, setPokemonsLink] = useState(false);
+  useEffect(() => {
+    window.addEventListener('scroll', detectScroll);
+    return () => {
+      window.removeEventListener('scroll', detectScroll);
+    }
+  }, [detectScroll]);
+
+  function insertPokemons(pokemonsToInsert, nextPokemons = next) {
+    const allPokemonData = [];
+    let sortedPokemons =  [];
+    let cont = 0;
+    pokemonsToInsert.forEach(async pokemon => {
+      await fetch(pokemon.url)
+        .then(res => res.json())
+        .then(data => {
+          cont++;
+          allPokemonData.push(data)
+          if (cont === 20) {
+            sortedPokemons = pokemonsData.concat(allPokemonData.sort((a, b) => {
+              if (a.id > b.id) {
+                return 1;
+              } else if (a.id === b.id) {
+                return 0;
+              } else {
+                return -1;
+              }
+            }));
+            setPokemonsData(sortedPokemons);
+            setPokemonsLink(nextPokemons);
+          }
+        });
+    });
+  }
 
   useEffect(() => {
-    const allPokemonData = [];
-    let sortedPokemons = [];
-    let cont = 0;
     if (pokemonsToFetch) {
-      pokemonsToFetch.forEach(async pokemon => {
-        await fetch(pokemon.url)
-          .then(res => res.json())
-          .then(data => {
-            cont++;
-            allPokemonData.push(data)
-            if(cont === 20) {
-              sortedPokemons = allPokemonData.sort((a,b) => {
-                if (a.id > b.id) {
-                  return 1;
-                } else if (a.id === b.id){
-                  return 0;
-                } else {
-                  return -1;
-                }
-              });
-              setPokemonsData(sortedPokemons);
-            }
-          });
-      });
+      insertPokemons(pokemonsToFetch);
+
     }
   }, [pokemonsToFetch]);
-
+  
   function handlePokemons() {
-    return pokemonsData.map(pokemon => <Link className={"pokemonLink"} to={`/pokemon/${pokemon.name}`}><Pokemon key={pokemon.name} data={pokemon} /></Link>)
+    return pokemonsData.map(pokemon => {
+      return(
+        <Link key={`link-${pokemon.name}`} to={`/pokemon/${pokemon.name}`}>
+          <Pokemon key={pokemon.name} data={pokemon}/>
+        </Link>);
+    })
     
   }
+
+  function detectScroll(e) {
+    const isPageBottom = 
+      (window.pageYOffset + window.innerHeight) === document.documentElement.scrollHeight;
+
+    if (isPageBottom) {
+      setBottomLoad(true);
+      fetch(pokemonsLink)
+        .then(res => res.json())
+        .then(data => {
+          // debugger;
+          insertPokemons(data.results, data.next);
+          console.log(data)
+        });
+    } else {
+      setBottomLoad(false);
+    }
+  }
+
+  function displayBottomLoader() {
+    return (
+      <BottomLoader>
+        <BottomSpinner></BottomSpinner>
+        <p>Loading more pokemons</p>
+      </BottomLoader>
+    );
+  }
+
   return(
     <HomeWrapper>
       <MainTitle>
@@ -95,7 +168,11 @@ const Home = ({ pokemonsToFetch }) => {
         Types
       </TypesContainer>
       {handlePokemons()}
-
+      {showBottomLoad ? 
+        displayBottomLoader() 
+        :
+        ""
+      }
     </HomeWrapper>
   );
 }

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import grass from '../assets/img/hoja.svg';
 
 const PokemonInfoContainer = styled.div`
     position: relative;
@@ -119,11 +118,13 @@ const ColWrapper = styled.div`
 const EvolutionImage = styled.img`
     width: 100%;
     height: auto;
+    margin-bottom: 0.2rem;
   `;
 
 const EvolutionName = styled.p`
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     text-align: center;
+    text-transform: capitalize;
     color: ${props => props.theme.mainFontColor};
   `;
 
@@ -161,7 +162,7 @@ const StatName = styled.p`
     font-size: 0.8rem;
     width: 20%;
     font-weight: 400;
-    text-transform: uppercase;
+    text-transform: capitalize;
     color: ${props => props.theme.lightGray};
   `;
 
@@ -188,31 +189,6 @@ const BarProgress = styled.div`
     height: 100%;
     background-color: ${props => props.theme[`${props.type}`]};
   `;
-const NextPok = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  `;
-const PrevPok = styled.div`
-    display: flex;
-    visibility: hidden;
-    flex-direction: column;
-    align-items: flex-start;
-  `;
-
-const NextPokImage = styled.img`
-    width: 3rem;
-  `;
-
-const NextPokeTitle = styled.p`
-    color: ${props => props.theme.lightGray};
-  `;
-
-const BottomSection = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  `;
   
 const PokemonInfo = (props) => {
   const location = useLocation();
@@ -222,10 +198,6 @@ const PokemonInfo = (props) => {
   
   
   useEffect(() => {
-    // fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToShow}`)
-    //   .then(res => res.json())
-    //   .then(data => data)
-    //   .then();
     Promise.all([
       fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToShow}`),
       fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonToShow}/`)
@@ -233,7 +205,6 @@ const PokemonInfo = (props) => {
       .then(responses => Promise.all(responses.map(res => res.json())))
       .then(data => {
         const evolution_url = data[1].evolution_chain.url;
-
         fetch(evolution_url)
           .then(res => res.json())
           .then(evolutions => {
@@ -241,12 +212,12 @@ const PokemonInfo = (props) => {
             setpokemonEvolutions(evolutions);
           });
       });
-  }, []);
+  }, [pokemonToShow]);
   
   function getPokemonTypes() {
     let types = [];
     pokemonData.types.forEach(type => {
-      types.push(<PokemonType type={type.type.name}>{type.type.name}</PokemonType>);
+      types.push(<PokemonType key={type.type.name} type={type.type.name}>{type.type.name}</PokemonType>);
     })
 
     return types;
@@ -267,7 +238,7 @@ const PokemonInfo = (props) => {
       let currentEvolution = evolutionToGet[0].species;
       let evolutionId = getEvolutionIdFromUrl(currentEvolution.url);
       allEvolutions.push(
-        <ColWrapper>
+        <ColWrapper key={currentEvolution.name}>
           <EvolutionImage src={`https://pokeres.bastionbot.org/images/pokemon/${evolutionId}.png`} />
           <EvolutionName>{currentEvolution.name}</EvolutionName>
           <EvolutionCondition></EvolutionCondition>
@@ -282,16 +253,21 @@ const PokemonInfo = (props) => {
 
   function getPokemonStats() {
     const stats = pokemonData.stats;
-
-    return stats.map(stat => 
-      <Stat>
-        <StatName>{stat.stat.name}</StatName>
+    const statConvertion = {
+      'special-attack' : 'sp. atk',
+      'special-defense' : 'sp. def',
+    }
+    return stats.map(stat => {
+     return (<Stat key={stat.stat.name}>
+        <StatName>
+          {statConvertion[stat.stat.name] || stat.stat.name}
+        </StatName>
         <StatNumber>{stat.base_stat}</StatNumber>
         <StatBar>
           <BarProgress progress={stat.base_stat} type={pokemonData.types[0].type.name}></BarProgress>
         </StatBar>
-      </Stat>
-    );
+      </Stat>)
+    });
   }
 
   return(
@@ -346,7 +322,7 @@ const PokemonInfo = (props) => {
           {getPokemonStats()}
         </StatsContainer>
       </PokemonSection>
-      <BottomSection>
+      {/* <BottomSection>
         <PrevPok>
           <NextPokeTitle>Previous</NextPokeTitle>
           <NextPokImage src={'https://pokeres.bastionbot.org/images/pokemon/2.png'} />
@@ -355,7 +331,7 @@ const PokemonInfo = (props) => {
           <NextPokeTitle>Next</NextPokeTitle>
           <NextPokImage src={'https://pokeres.bastionbot.org/images/pokemon/2.png'} />
         </NextPok>
-      </BottomSection>
+      </BottomSection> */}
     </PokemonInfoContainer>
     : ""
   )
