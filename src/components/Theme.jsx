@@ -26,7 +26,9 @@ const theme = {
   ghost: '#705898',
   dark: '#705848',
   steel: '#B8B8D0',
-  fairy: '#EE99AC'
+  fairy: '#EE99AC',
+  unknown: '#68A090',
+  shadow: '#21147D'
 };
 const Theme = ({children}) => {
   return (

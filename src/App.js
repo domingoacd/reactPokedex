@@ -21,12 +21,16 @@ function App() {
 
   const [pokemons, updatePokemons] = useState([]);
   const [nextPokemons, updateNextPokemons] = useState(false);
-  
+  const [pokemonsTypes, updatePokemonsTypes] = useState([]);
+
   useEffect(() => {
     api.getAllPokemons().then((pokemons) => {
-      console.log(pokemons.next)
       updateNextPokemons(pokemons.next);
       updatePokemons(pokemons.results);
+    });
+
+    api.getAllTypes().then((types) => {
+      updatePokemonsTypes(types);
     });
   }, []);
 
@@ -34,14 +38,21 @@ function App() {
     <BrowserRouter>
       <AppWrapper>
         <Switch>
-          <Route 
-            exact 
-            path="/" 
-            render={(props) => <Home {...props} pokemonsToFetch={pokemons} next={nextPokemons}/>}
+          <Route
+            exact
+            path="/"
+            render={props => (
+              <Home
+                {...props}
+                pokemonsToFetch={pokemons}
+                next={nextPokemons}
+                pokemonsTypes={pokemonsTypes}
+              />
+            )}
           />
-          <Route path="/pokemon" component={PokemonInfo}/>
+          <Route path="/pokemon" component={PokemonInfo} />
         </Switch>
-      </AppWrapper>    
+      </AppWrapper>
     </BrowserRouter>
   );
 }

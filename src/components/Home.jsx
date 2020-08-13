@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Pokemon from './Pokemon';
 import styled from 'styled-components';
+import TypesBar from './TypesBar';
 
 const HomeWrapper = styled.div`
     width: 100%;
@@ -34,21 +35,6 @@ const SearchBar = styled.input`
     }
   `;
 
-const TypesContainer = styled.div`
-    width: 100%;
-    max-width: 40rem;
-    height: 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 20px;
-    font-size: 1.5rem;
-    margin-top: 1.5rem;
-    padding: 0 1.5rem;
-    color: ${(props) => props.theme.whiteTone};
-    background-color: ${(props) => props.theme.blue};
-  `;
-
 const BottomLoader = styled.div`
   position: absolute;
   bottom: 0;
@@ -75,7 +61,7 @@ const BottomSpinner = styled.div`
   animation: spin 1s linear infinite;
 `;
 
-const Home = ({ pokemonsToFetch, next }) => {
+const Home = ({ pokemonsToFetch, next, pokemonsTypes }) => {
 
   const [pokemonsData, setPokemonsData] = useState([]);
   const [showBottomLoad, setBottomLoad] = useState(false);
@@ -158,21 +144,13 @@ const Home = ({ pokemonsToFetch, next }) => {
     );
   }
 
-  return(
+  return (
     <HomeWrapper>
-      <MainTitle>
-        POKEDEX
-      </MainTitle>
-      <SearchBar placeholder="Search pokemon"/>
-      <TypesContainer>
-        Types
-      </TypesContainer>
+      <MainTitle>POKEDEX</MainTitle>
+      <SearchBar placeholder="Search pokemon" />
+      <TypesBar types={pokemonsTypes}></TypesBar>
       {handlePokemons()}
-      {showBottomLoad ? 
-        displayBottomLoader() 
-        :
-        ""
-      }
+      {showBottomLoad ? displayBottomLoader() : ''}
     </HomeWrapper>
   );
 }
