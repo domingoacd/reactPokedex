@@ -34,16 +34,14 @@ function App() {
     <BrowserRouter>
       <AppWrapper>
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={props => (
-              <Home {...props} pokemonsToFetch={pokemons} next={nextPokemons} />
-            )}
+          <Route 
+            exact 
+            path="/" 
+            render={(props) => <Home {...props} pokemonsToFetch={pokemons} next={nextPokemons}/>}
           />
-          <Route path="/pokemon" component={PokemonInfo} />
+          <Route path="/pokemon" component={PokemonInfo}/>
         </Switch>
-      </AppWrapper>
+      </AppWrapper>    
     </BrowserRouter>
   );
 }
