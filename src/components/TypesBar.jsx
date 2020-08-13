@@ -24,7 +24,7 @@ const ArrowIcon = styled.img`
   width: 1.2rem;
   height: 1.2rem;
   filter: invert(1);
-  transform: ${props => props.stretchIsActive ? 'rotate(90deg)' : 'rotate(-90deg)'};
+  transform: ${props => props.stretchIsActive ? 'rotate(-90deg)' : 'rotate(90deg)'};
   transition: transform 0.5s;
 `;
 
