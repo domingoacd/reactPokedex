@@ -322,16 +322,6 @@ const PokemonInfo = (props) => {
           {getPokemonStats()}
         </StatsContainer>
       </PokemonSection>
-      {/* <BottomSection>
-        <PrevPok>
-          <NextPokeTitle>Previous</NextPokeTitle>
-          <NextPokImage src={'https://pokeres.bastionbot.org/images/pokemon/2.png'} />
-        </PrevPok>
-        <NextPok>
-          <NextPokeTitle>Next</NextPokeTitle>
-          <NextPokImage src={'https://pokeres.bastionbot.org/images/pokemon/2.png'} />
-        </NextPok>
-      </BottomSection> */}
     </PokemonInfoContainer>
     : ""
   )

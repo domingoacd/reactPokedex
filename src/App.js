@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import styled from 'styled-components';
 import api from './api-fetcher';
+import TypeSection from './components/TypeSection';
 import PokemonInfo from './components/PokemonInfo';
 import Home from './components/Home';
 
@@ -51,6 +52,7 @@ function App() {
             )}
           />
           <Route path="/pokemon" component={PokemonInfo} />
+          <Route path="/types" component={TypeSection} />
         </Switch>
       </AppWrapper>
     </BrowserRouter>

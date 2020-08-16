@@ -8,6 +8,16 @@ const api = {
     const types = await fetch('https://pokeapi.co/api/v2/type')
       .then(res => res.json());
     return types;
+  },
+  getPokemonDataToCard: async function() {
+
+  },
+  getPokemonsByType: async function(type) {
+    const pokemonsByType = await fetch(`https://pokeapi.co/api/v2/type/${type}`)
+      .then(res => res.json());
+      
+      
+      return pokemonsByType
   }
 }
 

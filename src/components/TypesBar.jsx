@@ -83,8 +83,7 @@ const TypesBar = ({types}) => {
     return allTypes;
 
   }
-
-  console.log(types);
+  
   return (
     <TypesContainer stretch={show}>
       <Upper onClick={changeContainerHeight} stretchIsActive={show}>
