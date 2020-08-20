@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 
 const PokemonContainer = styled.div`
@@ -6,7 +6,7 @@ const PokemonContainer = styled.div`
     width: 80vw;
     max-width: 25rem;
     height: 6rem;
-    display: flex;
+    display: ${props => props.show ? 'flex' : 'none'};
     justify-content: space-between;
     align-items: center;
     margin-top: 2rem;
@@ -70,15 +70,23 @@ const PokemonTypeIcon = styled.img`
   `;
 
 const Pokemon = (props) => {
+  const [show, showPokemon] = useState(true);
+
+  function getPokemonImage() {
+    const img = new Image();
+    img.src = `https://pokeres.bastionbot.org/images/pokemon/${props.data.id}.png`;
+    img.onerror = () =>  showPokemon(false);
+    return <PokemonImage src={`https://pokeres.bastionbot.org/images/pokemon/${props.data.id}.png`} />;
+  }
 
   return( 
-    <PokemonContainer type={props.data.types[0].type.name}>
+    <PokemonContainer type={props.data.types[0].type.name} show={show}>
       <ContainerLeftSide>
         <PokemonTypeIcon src={`/images/${props.data.types[0].type.name}.svg`}/>
         <PokemonName>{props.data.name}</PokemonName>
         <PokemonNumber>#{props.data.id}</PokemonNumber>
       </ContainerLeftSide>
-      <PokemonImage src={`https://pokeres.bastionbot.org/images/pokemon/${props.data.id}.png`}/>
+      {getPokemonImage()}
     </PokemonContainer>
   );
 }

@@ -34,49 +34,104 @@ const TypeImage = styled.div`
   mask-size: contain;
   background: ${props => props.theme[props.type]};
 `
+
+const BottomLoader = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 20rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 0.7rem;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  color: ${props => props.theme.whiteTone};
+  background-color: ${props => props.theme.barGray};
+`;
+
+const BottomSpinner = styled.div`
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid ${props => props.theme.barGray};
+  border-top: 2px solid ${props => props.theme.whiteTone};
+  border-left: 2px solid ${props => props.theme.whiteTone};
+  animation: spin 1s linear infinite;
+`;
+
 const TypeSection = () => {
   const typeToFetch = useLocation().pathname.split('/')[2];
   const [pokemons, setPokemons] = useState([]);
+  const [showBottomLoad, setBottomLoad] = useState(false);
   const [currentOffset, setOffset] = useState(0);
   const [currentPokemons, setCurrentPokemons] = useState([]);
-  
+
+  useEffect(() => {
+    window.addEventListener('scroll', detectScroll);
+    return () => {
+      window.removeEventListener('scroll', detectScroll);
+    }
+  }, [detectScroll]);
+
+  function getNextPokemons() {
+    let currPoks = pokemons.slice(currentOffset, currentOffset + 20);
+    let cont = 0;
+    let retrivedData = [];
+    let sortedPokemons = [];
+    currPoks.forEach(async pok => {
+      await fetch(pok.pokemon.url)
+        .then(res => res.json())
+        .then(data => {
+          cont++;
+          retrivedData.push(data);
+          if (cont === 20 || (currentPokemons.length + cont) === pokemons.length) {
+            
+            sortedPokemons = currentPokemons.concat(retrivedData.sort((a, b) => {
+              if (a.id > b.id) {
+                return 1;
+              } else if (a.id === b.id) {
+                return 0;
+              } else {
+                return -1;
+              }
+            }));
+            setCurrentPokemons(sortedPokemons);
+            setOffset(currentOffset + 20);
+          }
+        });
+    });
+  }
+
   useEffect(() => {
     api.getPokemonsByType(typeToFetch)
       .then(data => {
         setPokemons(data.pokemon);
-
-        let currPoks = data.pokemon.slice(currentOffset, currentOffset + 20);
-        let cont = 0;
-        let retrivedData = [];
-        let sortedPokemons = [];
-
-        currPoks.forEach(async pok => {
-          await fetch(pok.pokemon.url)
-            .then(res => res.json())
-            .then(data => {
-              cont++;
-              retrivedData.push(data);
-              if (cont === 20) {
-                sortedPokemons = currentPokemons.concat(retrivedData.sort((a, b) => {
-                  if (a.id > b.id) {
-                    return 1;
-                  } else if (a.id === b.id) {
-                    return 0;
-                  } else {
-                    return -1;
-                  }
-                }));
-                setCurrentPokemons(sortedPokemons);
-                setOffset(currentOffset + 20);
-              }
-            });
-        });
+        getNextPokemons()
       });
-
     
-  }, []) ;
-
-  function getPokemons() {}
+  }, [pokemons.length]) ;
+  
+  function detectScroll(e) {
+    const isPageBottom =
+      (window.pageYOffset + window.innerHeight) === document.documentElement.scrollHeight;
+    let nextPokemons = [];
+    if (isPageBottom && currentPokemons.length < pokemons.length) {
+      setBottomLoad(true);
+      getNextPokemons();
+    } else {
+      setBottomLoad(false);
+    }
+  }
+  function displayBottomLoader() {
+    return (
+      <BottomLoader>
+        <BottomSpinner></BottomSpinner>
+        <p>Loading more pokemons</p>
+      </BottomLoader>
+    );
+  }
 
   function insertPokemons() {
     return currentPokemons.map(pok => {
@@ -86,7 +141,7 @@ const TypeSection = () => {
         </Link>);
     });
   }
-
+  
   return (
     <MainContainer>
       <TypeImage type={typeToFetch}/>
@@ -96,6 +151,7 @@ const TypeSection = () => {
         <SubTitle>Pokemons</SubTitle>
       </Title>
       {insertPokemons()}
+      {showBottomLoad ? displayBottomLoader() : ''}
     </MainContainer>
   )
 }
