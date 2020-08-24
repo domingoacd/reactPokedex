@@ -19,21 +19,45 @@ const MainTitle = styled.h1`
     color: ${(props) => props.theme.mainTitleColor};
   `;
 
-const SearchBar = styled.input`
+const SearchBar = styled.form`
     width: 90%;
     max-width: 30rem;
     height: 2.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 2rem;
     padding: 0 1rem;
     border-radius: 20px;
-    font-size: 1.2rem;
     color: ${(props) => props.theme.mainFontColor};
     border: 2px solid ${(props) => props.theme.lightBlue};
     background-color: ${(props) => props.theme.whiteTone};
-    :focus {
-      outline: none;
-    }
   `;
+
+const SearchInput = styled.input`
+  width: 90%;
+  height: 100%;
+  font-size: 1.2rem;
+  border: none;
+  color: inherit;
+  :focus {
+    outline: none;
+  }
+`;
+
+const SearchButton = styled.button`
+  width: 2rem;
+  height: 70%;
+  border: none;
+  opacity: 0.5;
+  cursor: pointer;
+  background-size: 100% 100%;
+  background-image: url("/images/buscar.svg");
+  background-color: transparent;
+  :focus {
+    outline: none;
+  }
+`;
 
 const BottomLoader = styled.div`
   position: absolute;
@@ -61,11 +85,33 @@ const BottomSpinner = styled.div`
   animation: spin 1s linear infinite;
 `;
 
+const ErrorSearchBox = styled.div`
+  position: fixed;
+  z-index: 100;
+  top: ${props => props.show ? '1rem' : '-100rem'};
+  right: 2rem;
+  width: 10rem;
+  height: 5.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 10px;
+  transition: top 0.5s;
+  color: #fff;
+  background-color: #f36262;
+  box-shadow: 0px 0px 10px rgba(255,0,0,0.5);
+`;
+
 const Home = ({ pokemonsToFetch, next, pokemonsTypes }) => {
 
   const [pokemonsData, setPokemonsData] = useState([]);
   const [showBottomLoad, setBottomLoad] = useState(false);
   const [pokemonsLink, setPokemonsLink] = useState(false);
+  const [pokemonToSearch, setPokemonToSearch] = useState('');
+  const [searchError, showErrorSearch] = useState(false);
+
   useEffect(() => {
     window.addEventListener('scroll', detectScroll);
     return () => {
@@ -144,10 +190,27 @@ const Home = ({ pokemonsToFetch, next, pokemonsTypes }) => {
     );
   }
 
+  function searchPokemon(e) {
+    e.preventDefault();
+
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToSearch.toLowerCase()}`)
+      .then(res => res.json())
+      .then(data => window.location.href = `/pokemon/${data.species.name}`)
+      .catch(e => {
+        showErrorSearch(true);
+        setTimeout(() => {
+          showErrorSearch(false)
+        }, 2000);
+      });
+  }
   return (
     <HomeWrapper>
+      <ErrorSearchBox show={searchError}> Ups! Pokemon not found.</ErrorSearchBox>
       <MainTitle>POKEDEX</MainTitle>
-      <SearchBar placeholder="Search pokemon" />
+      <SearchBar onSubmit={searchPokemon}>
+        <SearchInput placeholder="Search pokemon by name or number" onChange={e => setPokemonToSearch(e.target.value)}/>
+        <SearchButton type="submit"></SearchButton>
+      </SearchBar>
       <TypesBar types={pokemonsTypes}></TypesBar>
       {handlePokemons()}
       {showBottomLoad ? displayBottomLoader() : ''}

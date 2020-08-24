@@ -71,9 +71,11 @@ const TypesBar = ({types}) => {
     if (types.results) {
       allTypes = types.results.map(type => {
         return (
+          type.name !== 'shadow' && type.name !== 'unknown' ? 
           <Link to={`types/${type.name}`} key={`tp-${type.name}`}>
             <Type type={type.name}>{type.name}</Type>
           </Link>
+          : false
         );
       });
     } else {
