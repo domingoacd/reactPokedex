@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import api from '../api-fetcher';
 import Pokemon from './Pokemon';
+import Loader from './Loader';
 
 const MainContainer = styled.div`
   display: flex;
@@ -143,6 +144,7 @@ const TypeSection = () => {
   }
   
   return (
+    currentPokemons.length > 0 ?
     <MainContainer>
       <TypeImage type={typeToFetch}/>
       <Title type={typeToFetch}>
@@ -153,6 +155,7 @@ const TypeSection = () => {
       {insertPokemons()}
       {showBottomLoad ? displayBottomLoader() : ''}
     </MainContainer>
+    : <Loader />
   )
 }
 

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Loader from './Loader';
 
 const PokemonInfoContainer = styled.div`
     position: relative;
@@ -66,7 +67,7 @@ const PokemonTypesContainer = styled.div`
     margin-bottom: 1rem;
   `;
 
-const PokemonType = styled.a`
+const PokemonType = styled.div`
     width: 7rem;
     height: 2.5rem;
     display: grid;
@@ -105,6 +106,7 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
   `;
 
 const ColWrapper = styled.div`
@@ -125,6 +127,7 @@ const EvolutionName = styled.p`
     font-size: 0.8rem;
     text-align: center;
     text-transform: capitalize;
+    margin-bottom: 1rem;
     color: ${props => props.theme.mainFontColor};
   `;
 
@@ -217,7 +220,11 @@ const PokemonInfo = (props) => {
   function getPokemonTypes() {
     let types = [];
     pokemonData.types.forEach(type => {
-      types.push(<PokemonType key={type.type.name} type={type.type.name}>{type.type.name}</PokemonType>);
+      types.push(
+        <Link to={`/types/${type.type.name}`} key={type.type.name}>
+          <PokemonType type={type.type.name}>{type.type.name}</PokemonType>
+        </Link>
+        );
     })
 
     return types;
@@ -228,23 +235,31 @@ const PokemonInfo = (props) => {
     return urlChunks[urlChunks.length - 2];
   }
 
+  function getEvolutionDetails(detailsList) {
+    console.log(detailsList);
+  }
+
   function getEvolutions() {
     let evolutionToGet = [pokemonEvolutions.chain];
     let allEvolutions = [];
-
+    let currentEvolution = [];
+    let evolutionId = "";
     
     
     do {
-      let currentEvolution = evolutionToGet[0].species;
-      let evolutionId = getEvolutionIdFromUrl(currentEvolution.url);
-      allEvolutions.push(
-        <ColWrapper key={currentEvolution.name}>
-          <EvolutionImage src={`https://pokeres.bastionbot.org/images/pokemon/${evolutionId}.png`} />
-          <EvolutionName>{currentEvolution.name}</EvolutionName>
-          <EvolutionCondition></EvolutionCondition>
-        </ColWrapper>
-      );
-
+      evolutionToGet.forEach(evolution => {
+        currentEvolution = evolution.species;
+        evolutionId = getEvolutionIdFromUrl(currentEvolution.url);
+        allEvolutions.push(
+          <ColWrapper>
+            <Link key={currentEvolution.name} to={`/pokemon/${currentEvolution.name}`} >
+              <EvolutionImage src={`https://pokeres.bastionbot.org/images/pokemon/${evolutionId}.png`} />
+              <EvolutionName>{currentEvolution.name}</EvolutionName>
+              <EvolutionCondition>{getEvolutionDetails(evolution.evolution_details)}</EvolutionCondition>
+            </Link>
+          </ColWrapper>
+        );
+      })
       evolutionToGet = evolutionToGet[0].evolves_to;
     } while (evolutionToGet.length > 0);
 
@@ -323,7 +338,7 @@ const PokemonInfo = (props) => {
         </StatsContainer>
       </PokemonSection>
     </PokemonInfoContainer>
-    : ""
+    : <Loader />
   )
 }
 
