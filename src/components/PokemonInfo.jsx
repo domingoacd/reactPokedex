@@ -203,7 +203,7 @@ const PokemonInfo = (props) => {
   useEffect(() => {
     Promise.all([
       fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToShow}`),
-      fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonToShow}/`)
+      fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonToShow}/`),
     ])
       .then(responses => Promise.all(responses.map(res => res.json())))
       .then(data => {
@@ -211,6 +211,7 @@ const PokemonInfo = (props) => {
         fetch(evolution_url)
           .then(res => res.json())
           .then(evolutions => {
+            data[0].summary = data[1].flavor_text_entries[0].flavor_text.replace('\f', ' ');
             setPokemonData(data[0]);
             setpokemonEvolutions(evolutions);
           });
@@ -236,7 +237,7 @@ const PokemonInfo = (props) => {
   }
 
   function getEvolutionDetails(detailsList) {
-    console.log(detailsList);
+    
   }
 
   function getEvolutions() {
@@ -251,8 +252,8 @@ const PokemonInfo = (props) => {
         currentEvolution = evolution.species;
         evolutionId = getEvolutionIdFromUrl(currentEvolution.url);
         allEvolutions.push(
-          <ColWrapper>
-            <Link key={currentEvolution.name} to={`/pokemon/${currentEvolution.name}`} >
+          <ColWrapper key={currentEvolution.name}>
+            <Link to={`/pokemon/${currentEvolution.name}`} >
               <EvolutionImage src={`https://pokeres.bastionbot.org/images/pokemon/${evolutionId}.png`} />
               <EvolutionName>{currentEvolution.name}</EvolutionName>
               <EvolutionCondition>{getEvolutionDetails(evolution.evolution_details)}</EvolutionCondition>
@@ -284,7 +285,7 @@ const PokemonInfo = (props) => {
       </Stat>)
     });
   }
-
+  
   return(
     pokemonData && pokemonEvolutions?
     <PokemonInfoContainer>
@@ -305,7 +306,7 @@ const PokemonInfo = (props) => {
       </PokemonTypesContainer>
 
       <PokemonDescription>
-        Reprehenderit in adipisicing sint fugiat veniam aliquip. Culpa deserunt velit aliquip nostrud. Fugiat cupidatat adipisicing aliqua Lorem.  
+        {pokemonData.summary}
       </PokemonDescription>
 
       <PokemonSection>

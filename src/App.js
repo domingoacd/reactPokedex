@@ -5,6 +5,7 @@ import api from './api-fetcher';
 import TypeSection from './components/TypeSection';
 import PokemonInfo from './components/PokemonInfo';
 import Home from './components/Home';
+import NotFound from './components/404.jsx';
 
 const AppWrapper = styled.div`
   position: relative;
@@ -53,6 +54,7 @@ function App() {
           />
           <Route path="/pokemon" component={PokemonInfo} />
           <Route path="/types" component={TypeSection} />
+          <Route component={NotFound} />
         </Switch>
       </AppWrapper>
     </BrowserRouter>
