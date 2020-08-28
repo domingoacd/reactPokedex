@@ -90,7 +90,7 @@ const TypesBar = ({types}) => {
     <TypesContainer stretch={show}>
       <Upper onClick={changeContainerHeight} stretchIsActive={show}>
         <p>Pokemon types</p>
-        <ArrowIcon src="./images/next.svg" stretchIsActive={show}></ArrowIcon>
+        <ArrowIcon src="/reactPokedex/images/next.svg" stretchIsActive={show}></ArrowIcon>
       </Upper>
       <Lower stretchIsActive={show}>
         {getTypes()}

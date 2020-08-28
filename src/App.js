@@ -42,7 +42,7 @@ function App() {
         <Switch>
           <Route
             exact
-            path="/"
+            path="/reactPokedex"
             render={props => (
               <Home
                 {...props}

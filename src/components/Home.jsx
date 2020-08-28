@@ -52,7 +52,7 @@ const SearchButton = styled.button`
   opacity: 0.5;
   cursor: pointer;
   background-size: 100% 100%;
-  background-image: url("/images/buscar.svg");
+  background-image: url("/reactPokedex/images/buscar.svg");
   background-color: transparent;
   :focus {
     outline: none;

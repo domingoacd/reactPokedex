@@ -36,7 +36,7 @@ const Loader = ({show}) => {
   return (
     <Container>
       Loading!!
-      <Image src='/images/pokemon.svg'/>
+      <Image src='/reactPokedex/images/pokemon.svg'/>
     </Container>
   );
 }

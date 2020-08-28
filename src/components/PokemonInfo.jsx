@@ -291,7 +291,7 @@ const PokemonInfo = (props) => {
     <PokemonInfoContainer>
       
       <Circle type={pokemonData.types[0].type.name}>
-          <PokemonIcon src={`/images/${pokemonData.types[0].type.name}.svg`} />
+          <PokemonIcon src={`/reactPokedex/images/${pokemonData.types[0].type.name}.svg`} />
       </Circle>
 
       <PokemonMainInfo>

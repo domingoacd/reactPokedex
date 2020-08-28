@@ -31,7 +31,7 @@ const TypeImage = styled.div`
   width: 20rem;
   height: 20rem;
   opacity: 0.5;
-  mask: ${props => `url("/images/${props.type}.svg")`};
+  mask: ${props => `url("/reactPokedex/images/${props.type}.svg")`};
   mask-size: contain;
   background: ${props => props.theme[props.type]};
 `
