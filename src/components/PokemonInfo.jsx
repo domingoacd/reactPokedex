@@ -195,7 +195,7 @@ const BarProgress = styled.div`
   
 const PokemonInfo = (props) => {
   const location = useLocation();
-  const pokemonToShow = location.pathname.split('/')[2];
+  const pokemonToShow = location.pathname.split('/')[3];
   const [ pokemonData, setPokemonData ] = useState("");
   const [ pokemonEvolutions, setpokemonEvolutions ] = useState("");
   
@@ -222,7 +222,7 @@ const PokemonInfo = (props) => {
     let types = [];
     pokemonData.types.forEach(type => {
       types.push(
-        <Link to={`/types/${type.type.name}`} key={type.type.name}>
+        <Link to={`/reactPokedex/types/${type.type.name}`} key={type.type.name}>
           <PokemonType type={type.type.name}>{type.type.name}</PokemonType>
         </Link>
         );
@@ -253,7 +253,7 @@ const PokemonInfo = (props) => {
         evolutionId = getEvolutionIdFromUrl(currentEvolution.url);
         allEvolutions.push(
           <ColWrapper key={currentEvolution.name}>
-            <Link to={`/pokemon/${currentEvolution.name}`} >
+            <Link to={`/reactPokedex/pokemon/${currentEvolution.name}`} >
               <EvolutionImage src={`https://pokeres.bastionbot.org/images/pokemon/${evolutionId}.png`} />
               <EvolutionName>{currentEvolution.name}</EvolutionName>
               <EvolutionCondition>{getEvolutionDetails(evolution.evolution_details)}</EvolutionCondition>

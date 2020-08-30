@@ -63,7 +63,7 @@ const BottomSpinner = styled.div`
 `;
 
 const TypeSection = () => {
-  const typeToFetch = useLocation().pathname.split('/')[2];
+  const typeToFetch = useLocation().pathname.split('/')[3];
   const [pokemons, setPokemons] = useState([]);
   const [showBottomLoad, setBottomLoad] = useState(false);
   const [currentOffset, setOffset] = useState(0);
@@ -137,7 +137,7 @@ const TypeSection = () => {
   function insertPokemons() {
     return currentPokemons.map(pok => {
       return (
-        <Link key={`link-${pok.name}`} to={`/pokemon/${pok.name}`}>
+        <Link key={`link-${pok.name}`} to={`/reactPokedex/pokemon/${pok.name}`}>
           <Pokemon key={pok.name} data={pok} />
         </Link>);
     });

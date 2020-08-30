@@ -156,7 +156,7 @@ const Home = ({ pokemonsToFetch, next, pokemonsTypes }) => {
   function handlePokemons() {
     return pokemonsData.map(pokemon => {
       return(
-        <Link key={`link-${pokemon.name}`} to={`/pokemon/${pokemon.name}`}>
+        <Link key={`link-${pokemon.name}`} to={`/reactPokedex/pokemon/${pokemon.name}`}>
           <Pokemon key={pokemon.name} data={pokemon}/>
         </Link>);
     })

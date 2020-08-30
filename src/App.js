@@ -52,8 +52,8 @@ function App() {
               />
             )}
           />
-          <Route path="/pokemon" component={PokemonInfo} />
-          <Route path="/types" component={TypeSection} />
+          <Route path="/reactPokedex/pokemon" component={PokemonInfo} />
+          <Route path="/reactPokedex/types" component={TypeSection} />
           <Route component={NotFound} />
         </Switch>
       </AppWrapper>
