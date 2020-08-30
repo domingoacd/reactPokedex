@@ -195,7 +195,7 @@ const Home = ({ pokemonsToFetch, next, pokemonsTypes }) => {
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonToSearch.toLowerCase()}`)
       .then(res => res.json())
-      .then(data => window.location.href = `/pokemon/${data.species.name}`)
+      .then(data => window.location.href = `/reactPokedex/pokemon/${data.species.name}`)
       .catch(e => {
         showErrorSearch(true);
         setTimeout(() => {
