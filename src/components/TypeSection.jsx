@@ -115,8 +115,9 @@ const TypeSection = () => {
   }, [pokemons.length]) ;
   
   function detectScroll(e) {
+    const currentScroll = window.pageYOffset + window.innerHeight;
     const isPageBottom =
-      (window.pageYOffset + window.innerHeight) === document.documentElement.scrollHeight;
+      (currentScroll + 100) >= document.documentElement.scrollHeight;
     let nextPokemons = [];
     if (isPageBottom && currentPokemons.length < pokemons.length) {
       setBottomLoad(true);
