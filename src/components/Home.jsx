@@ -164,10 +164,16 @@ const Home = ({ pokemonsToFetch, next, pokemonsTypes }) => {
   }
 
   function detectScroll(e) {
+    const currentScroll = window.pageYOffset + window.innerHeight;
     const isPageBottom = 
-      (window.pageYOffset + window.innerHeight) === document.documentElement.scrollHeight;
+      (currentScroll + 100) >= document.documentElement.scrollHeight;
 
-    if (isPageBottom) {
+    console.log('yoffset', window.pageYOffset);
+    console.log('innerHeight', window.innerHeight);
+    console.log('current', currentScroll);
+    console.log('bottom', document.documentElement.scrollHeight);
+
+    if (isPageBottom && pokemonsLink) {
       setBottomLoad(true);
       fetch(pokemonsLink)
         .then(res => res.json())
